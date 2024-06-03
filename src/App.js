@@ -3,23 +3,22 @@ import React from 'react';
 import useState from 'react';
 import './App.css';
 
-
 function App() {
   return (
-
-    <div class="image-wrapper">
-      <div
-          class = "image"
-          style = {{
-              filter: "blur(2px)", 
-              backgroundImage:
-              'url("https://eship.cornell.edu/wp-content/uploads/eHub-Collegetown.jpg")',
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-          }}>
-        </div>
+    <section className = 'hero'>
+      <div className = 'content'>
+        <h1>Rate your landlords</h1>
+        <p>
+          Review your landlords. Rate their properties.
+        </p>
+        <div className="search">
+          <input
+          type="text"
+          placeholder="Search..."
+          />
       </div>
-
+      </div>
+    </section>
   );
 }
 
