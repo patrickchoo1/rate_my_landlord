@@ -1,0 +1,23 @@
+.landlord-profile {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.landlord-profile img {
+  width: 150px;
+  border-radius: 50%;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.landlord-profile h2 {
+  margin: 10px 0;
+}
+
+.landlord-profile p {
+  margin: 5px 0;
+}
+
+.ratings p {
+  margin: 5px 0;
+}
