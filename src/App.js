@@ -1,25 +1,22 @@
-import logo from './logo.svg';
 import React from 'react';
-import useState from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './Home';
+import LandlordPage from './components/LandlordPage';
 import './App.css';
-
 
 function App() {
   return (
-
-    <div class="image-wrapper">
-      <div
-          class = "image"
-          style = {{
-              filter: "blur(2px)", 
-              backgroundImage:
-              'url("https://eship.cornell.edu/wp-content/uploads/eHub-Collegetown.jpg")',
-              backgroundSize: "contain",
-              backgroundRepeat: "no-repeat",
-          }}>
+    <Router>
+      <div className="App">
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/landlord/:id" element={<LandlordPage />} />
+          </Routes>
         </div>
       </div>
-
+    </Router>
   );
 }
 
