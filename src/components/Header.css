@@ -1,0 +1,21 @@
+.header {
+    background-color: #282c34;
+    padding: 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .header nav {
+    margin-top: 10px;
+  }
+  
+  .header a {
+    color: white;
+    margin: 0 10px;
+    text-decoration: none;
+  }
+  
+  .header a:hover {
+    text-decoration: underline;
+  }
+  
