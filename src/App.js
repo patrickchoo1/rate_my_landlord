@@ -1,19 +1,14 @@
 import logo from './logo.svg';
 import React from 'react';
 import useState from 'react';
+import HomePage from './components/HomePage';
 import './App.css';
 
 function App() {
   return (
-    <section className = 'hero'>
-      <div className = 'content'>
-        <h1>Rate your landlords</h1>
-        <p> Review your landlords. Rate their properties. </p>
-        <div className = 'search-wrapper'>
-          <input class = 'search' input type = 'text' placeholder = "Enter Landlord's Name"></input>
-        </div>
-      </div>
-    </section>
+   <div>
+    <HomePage />
+   </div>
   );
 }
 
