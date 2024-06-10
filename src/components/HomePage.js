@@ -1,22 +1,36 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
 
-function HomePage () {
+
+function HomePage() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            navigate('/landlord/${searchQuery}');
+        }
+    };
 
     return (
-        <section className = 'hero'>
-        <div className = 'content'>
-            <h1>Rate your landlords</h1>
-            <p> Review your landlords. Rate their properties. </p>
-            <div className = 'search-wrapper'>
-            <input class = 'search' input type = 'text' placeholder = "Enter Landlord's Name"></input>
+        <section className='hero'>
+            <div className='content'>
+                <h1>Rate your landlords</h1>
+                <p> Review your landlords. Rate their properties. </p>
+                <form className='search-wrapper' onSubmit={handleSearch}>
+                    <input class='search'
+                        input type='text'
+                        placeholder="Enter Landlord's Name"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}></input>
+                </form>
             </div>
-        </div>
-        </section>
+        </section >
     );
 }
 
 export default HomePage
-  
-  
+
