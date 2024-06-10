@@ -67,7 +67,7 @@ body, html {
     line-height: 50px; 
   }
   
-  input {
+  .search-wrapper input {
     padding-left: 40px; 
     font-size: 20px; 
   }
