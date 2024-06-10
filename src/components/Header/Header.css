@@ -1,0 +1,55 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #050136;
+  color: white;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background-image: url('./logo.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 20px;
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  justify-content: center;
+}
+
+.header-search input {
+  text-align: None;
+  background: white url('https://icons.veryicon.com/png/o/miscellaneous/prototyping-tool/search-bar-01.png') no-repeat 10px center;
+  background-size: 20px 20px;
+  height: 40px;
+  width: 400px;
+  outline: None;
+  border-radius: 20px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  line-height: 50px;
+  box-shadow: None;
+
+}
+
+.header-wrapper input::placeholder {
+  font-size: 20px;
+  line-height: 50px;
+}
+
+.header-search input {
+  padding-left: 40px;
+  font-size: 20px;
+}
