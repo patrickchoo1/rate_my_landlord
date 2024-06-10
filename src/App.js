@@ -15,6 +15,14 @@ function App() {
             <Route path="/landlord/:id" element={<LandlordPage />} />
           </Routes>
         </div>
+    <Router>
+      <div className="App">
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/landlord/:id" element={<LandlordPage />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
