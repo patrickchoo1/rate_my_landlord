@@ -27,7 +27,7 @@ function LandlordProfile() {
     };
   
     return (
-      <div className="landlord-page">
+      <div className="landlord-profile">
         <div className="profile-header">
           <div className="profile-overview">
             <div className="rating">

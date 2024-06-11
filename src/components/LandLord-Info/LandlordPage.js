@@ -1,6 +1,6 @@
 import React from 'react';
 import LandlordProfile from './LandlordProfile';
-import CommentList from './CommentList';
+import ReviewList from './ReviewList';
 import Header from '../Header/Header'
 import './LandlordPage.css';
 
@@ -9,7 +9,7 @@ function LandlordPage() {
         <div className="landlord-page">
             <Header />
             <LandlordProfile />
-            <CommentList />
+            <ReviewList />
         </div>
     );
 }
