@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Header.css';
 
 function Header() {
@@ -16,7 +16,7 @@ function Header() {
     return (
         <header className="header">
             <div className="header-left">
-                <div className="logo"></div>
+                <Link to="/" className="logo" />
             </div>
             <form className="header-search" onSubmit={handleSearch}>
                 <input
