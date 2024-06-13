@@ -1,8 +1,8 @@
 .landlord-page {
     text-align: left;
-    padding-bottom: 50px; 
-    margin-bottom: 50px;  
-    overflow-y: scroll; 
+    display: flex;
+    flex-direction: column;
+    width: 100%
   }
 
 

@@ -27,7 +27,7 @@ function ResultsBox() {
                         <p>Property Name</p>
                         <p>Sample Address: 229 Elizabeth St.</p>
                         <div className = 'take-again'>
-                            <span className="TA-QOL margin-right">99%</span> would take again | <span className="TA-QOL margin-right margin-left"> 5.0</span> Quality of Life
+                            <span className="TA-QOL margin-right">99%</span> would rent again | <span className="TA-QOL margin-right margin-left"> 5.0</span> Quality of Life
                         </div>
                     </div>
                 </div>
