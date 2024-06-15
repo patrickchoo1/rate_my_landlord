@@ -9,7 +9,6 @@ function LandlordPage() {
         <div className="landlord-page">
             <Header />
             <LandlordProfile />
-            <ReviewList />
         </div>
     );
 }

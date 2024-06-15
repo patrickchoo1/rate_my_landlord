@@ -1,4 +1,5 @@
 import React from 'react';
+import ReviewList from './ReviewList';
 import './LandlordProfile.css';
 
 
@@ -93,6 +94,7 @@ function LandlordProfile() {
           </div>
         </div>
       </div>
+      <ReviewList/>
     </div>
   );
 }
