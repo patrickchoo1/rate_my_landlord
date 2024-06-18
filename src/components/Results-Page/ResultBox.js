@@ -8,7 +8,7 @@ function ResultsBox() {
     const navigate = useNavigate(); 
 
     const handleClick = () => {
-        navigate("/LandlordPage/:id");
+        navigate("/landlord-page/:id");
     }
 
     return (

@@ -23,8 +23,8 @@ function Review({ review }) {
               <h3>{review.propertyName}</h3>
               <div className="details">
                 <span>Rent: {review.rent}</span>
-                <span>Pets Allowed: {review.petsAllowed}</span>
-                <span>Would Rent Again: {review.wouldRentAgain}</span>
+                <span>Pets Allowed: {review.pets ? 'Yes' : 'No'}</span>
+                <span>Would Rent Again: {review.rentAgain ? 'Yes' : 'No'}</span>
                 <span>Bedrooms: {review.bedrooms}</span>
                 <span>Bathrooms: {review.bathrooms}</span>
               </div>

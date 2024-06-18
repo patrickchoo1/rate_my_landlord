@@ -1,9 +1,16 @@
 import React from 'react';
 import ReviewList from './ReviewList';
 import './LandlordProfile.css';
+import { useNavigate } from 'react-router-dom';
 
 
 function LandlordProfile() {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/landlord-rating/:id");
+  }
+
   const landlord = {
     name: "Collegetown Properties",
     location: "Ithaca, NY",
@@ -46,14 +53,14 @@ function LandlordProfile() {
                 <span className="metric-value">{landlord.wouldRentAgain}%</span>
                 <span className="metric-label">Would rent again</span>
               </div>
-              <div className="separator"/>
+              <div className="separator" />
               <div className="metric">
                 <span className="metric-value">{landlord.responsiveness}</span>
                 <span className="metric-label">Responsiveness</span>
               </div>
             </div>
             <div className="actions">
-              <button className="rate-button">Rate</button>
+              <button className="rate-button" onClick={handleClick}>Rate</button>
               <button className="compare-button">Compare</button>
             </div>
           </div>
@@ -94,7 +101,7 @@ function LandlordProfile() {
           </div>
         </div>
       </div>
-      <ReviewList/>
+      <ReviewList />
     </div>
   );
 }

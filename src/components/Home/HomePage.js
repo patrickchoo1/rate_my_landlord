@@ -11,7 +11,7 @@ function HomePage() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate('/searchresults/${searchQuery}');
+            navigate('/search-results/${searchQuery}');
         }
     };
 
