@@ -24,9 +24,10 @@ function RatingScale({ label, scaleLeft, scaleRight }) {
                     </label>
                 ))}
             </div>
-            <div className="rating-scale">
-                <span className="scale-label">{scaleLeft}</span>
-                <span className="scale-label">{scaleRight}</span>
+            <div className="scale-labels">
+                <div className="scale-left">{scaleLeft}</div>
+                <div className="label-space"></div>
+                <div className="scale-right">{scaleRight}</div>
             </div>
         </div>
 

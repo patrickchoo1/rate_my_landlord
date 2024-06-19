@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from '../Header/Header'
 import RatingScale from './RatingScale';
+import YesNo from './YesNo';
 import './RatePage.css'
 
 function RatePage() {
@@ -24,7 +25,7 @@ function RatePage() {
                     <div className="form-card">
                         <div className="form-title">
                             Select Property
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
                             <select id="property" value={selectedOption} onChange={handleSelectChange} className="dropdown-select">
@@ -37,7 +38,7 @@ function RatePage() {
                     <div className="form-card">
                         <div className="form-title">
                             Rate your landlord
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
                             <RatingScale label="Rate your landlord" scaleLeft="1 - Awful" scaleRight="5 - Awesome" />
@@ -46,7 +47,7 @@ function RatePage() {
                     <div className="form-card">
                         <div className="form-title">
                             How responsive was this landlord?
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
                             <RatingScale label="How responsive was this landlord?" scaleLeft="1 - Very Unresponsive" scaleRight="5 - Very Responsive" />
@@ -55,7 +56,7 @@ function RatePage() {
                     <div className="form-card">
                         <div className="form-title">
                             How much did you pay for rent?
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
                             <textarea className="rent-entry" placeholder='Monthly rent'></textarea>
@@ -66,38 +67,16 @@ function RatePage() {
                             Does this property allow pets?
                         </div>
                         <div className="form-content">
-                            <div className="radio-buttons">
-                                <label className="radio-button">
-                                    <input type="radio" name="petsAllowed" value="Yes" required={false} />
-                                    <span className="radio-circle"></span>
-                                    Yes
-                                </label>
-                                <label className="radio-button">
-                                    <input type="radio" name="petsAllowed" value="No" required={false} />
-                                    <span className="radio-circle"></span>
-                                    No
-                                </label>
-                            </div>
+                            <YesNo />
                         </div>
                     </div>
                     <div className="form-card">
                         <div className="form-title">
                             Would you rent from this landlord again?
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
-                            <div className="radio-buttons">
-                                <label className="radio-button">
-                                    <input type="radio" name="rentAgain" value="Yes" required={true} />
-                                    <span className="radio-circle"></span>
-                                    Yes
-                                </label>
-                                <label className="radio-button">
-                                    <input type="radio" name="rentAgain" value="No" required={true} />
-                                    <span className="radio-circle"></span>
-                                    No
-                                </label>
-                            </div>
+                            <YesNo />
                         </div>
                     </div>
                     <div className="form-card">
@@ -119,7 +98,7 @@ function RatePage() {
                     <div className="form-card">
                         <div className="form-title">
                             Write a review
-                            <span>*</span>
+                            <span className="required">*</span>
                         </div>
                         <div className="form-content">
                             <textarea className="review-entry" placeholder='What do you want others to know about this landlord?'

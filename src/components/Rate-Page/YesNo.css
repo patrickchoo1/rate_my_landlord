@@ -1,0 +1,38 @@
+.yes-no-options {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.yes-no {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.yes-no input {
+    display: none;
+}
+
+.yes-no-circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    transition: border-color 0.3s;
+}
+
+.yes-no.selected .yes-no-circle {
+    border-color: #4caf50;
+    background-color: #4caf50;
+}
+
+.yes-no input:checked+.yes-no-circle {
+    border-color: #4caf50;
+    background-color: #4caf50;
+}
