@@ -11,14 +11,14 @@ function HomePage() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate('/landlord/${searchQuery}');
+            navigate('/search-results/${searchQuery}');
         }
     };
 
     return (
         <section className='hero'>
             <div className='content'>
-                <h1>Rate your landlords</h1>
+                <h1>Rate My Landlords</h1>
                 <p> Review your landlords. Rate their properties. </p>
                 <form className='search-wrapper' onSubmit={handleSearch}>
                     <input class='search'

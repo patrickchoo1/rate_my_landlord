@@ -9,7 +9,7 @@ function Header() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate(`/landlord/${searchQuery}`);
+            navigate('/searchresults/${searchQuery}');
         }
     };
 
