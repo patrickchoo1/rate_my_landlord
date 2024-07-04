@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getLandlords } = require('./dynamo');
+const { getLandlords, getLandlordInfo } = require('./dynamo');
 
 const app = express();
 app.use(cors());
@@ -28,6 +28,20 @@ app.get('/overallRating', (req, res) => {
     res.json({ overallRating: overallRating });
 });
 
+
+app.get('/landlord/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        const landlord = await getLandlordByName(name);
+        if (landlord) {
+            res.json(landlord);
+        } else {
+            res.status(404).json({ error: 'Landlord not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch landlord' });
+    }
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

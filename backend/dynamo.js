@@ -20,20 +20,7 @@ const createDistribution = () => {
     ]
     }
 
-const updateDistribution = (distribution, rating) => {
-    return {
-        pass
-    }
-}
-
-const createlandlordJSON = (landlord_name, property_name, distribution, reviews, total_rating) => {
-    return {
-        "landlord_name": landlord_name,
-        "property_name": property_name,
-    }
-}
-
-const getLandlord = async () => {
+const getLandlords = async () => {
     const params = {
         TableName: TABLE_NAME
     };
@@ -42,4 +29,13 @@ const getLandlord = async () => {
     return landlords
 }
 
-getLandlord();
+const getLandlordInfo = async (landlordName) => {
+    const params = {
+        TableName: TABLE_NAME,
+        Key: { landlord_name: landlordName }  
+    };
+    const landlord = await dynamoClient.get(params).promise();
+    return landlord.Item;
+};
+
+module.exports = { getLandlords, getLandlordInfo };
