@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './ResultBox.css';
 import { useNavigate } from 'react-router-dom';
 import Box from './Box';
+import axios from 'axios'
 
 function ResultsBox() {
 
@@ -10,6 +11,35 @@ function ResultsBox() {
     const handleClick = () => {
         navigate("/LandlordPage/:id");
     }
+
+    const [landlords, setLandlords] = useState([]);
+
+    const [overallRating, setOverallRating] = useState(null);
+
+    useEffect(() => {
+        const fetchLandlords = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/landlords');
+                setLandlords(response.data);
+            } catch (error) {
+                console.error('Failed to fetch landlords', error);
+            }
+        };
+
+        const fetchOverallRating = async () => {
+            try {
+                const response = await axios.get('http://localhost:8080/overallRating', {
+                    params: { totalRating: 589.5, numberOfRatings: 130 } // Example values
+                });
+                setOverallRating(response.data.overallRating);
+            } catch (error) {
+                console.error('Failed to fetch overall rating', error);
+            }
+        };
+
+        fetchLandlords();
+        fetchOverallRating();
+    }, []);
 
     return (
         <div className = 'currBox' onClick = {handleClick}>
