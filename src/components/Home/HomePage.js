@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
-
-
 function HomePage() {
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
@@ -11,7 +9,7 @@ function HomePage() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate('/searchresults/${searchQuery}');
+            navigate(`/landlord/${searchQuery}`);
         }
     };
 
@@ -21,16 +19,16 @@ function HomePage() {
                 <h1>Rate My Landlords</h1>
                 <p> Review your landlords. Rate their properties. </p>
                 <form className='search-wrapper' onSubmit={handleSearch}>
-                    <input class='search'
-                        input type='text'
+                    <input className='search'
+                        type='text'
                         placeholder="Enter Landlord's Name"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}></input>
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
                 </form>
             </div>
         </section >
     );
 }
 
-export default HomePage
-
+export default HomePage;
