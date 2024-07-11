@@ -9,7 +9,8 @@ function HomePage() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            navigate(`/landlord/${searchQuery}`);
+            console.log(`Navigating to /searchresults/${encodeURIComponent(searchQuery)}`);
+            navigate(`/searchresults/${encodeURIComponent(searchQuery)}`);
         }
     };
 
@@ -27,7 +28,7 @@ function HomePage() {
                     />
                 </form>
             </div>
-        </section >
+        </section>
     );
 }
 

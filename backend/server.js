@@ -33,14 +33,23 @@ app.get('/overallRating', (req, res) => {
 
 app.get('/landlord/:name', async (req, res) => {
     const { name } = req.params;
+    if (!name) {
+        console.error('No landlord name provided');
+        return res.status(400).json({ error: 'No landlord name provided' });
+    }
+
+    console.log(`Received request for landlord: ${decodeURIComponent(name)}`);
     try {
-        const landlord = await getLandlordByName(name);
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
         if (landlord) {
+            console.log('Found landlord:', landlord);
             res.json(landlord);
         } else {
+            console.log('Landlord not found');
             res.status(404).json({ error: 'Landlord not found' });
         }
     } catch (error) {
+        console.error('Failed to fetch landlord:', error); // Log the error
         res.status(500).json({ error: 'Failed to fetch landlord' });
     }
 });
