@@ -1,10 +1,10 @@
-const { getLandlordInfo } = require('./dynamo');
+const { getLandlords } = require('./dynamo');
 require('dotenv').config();
 
 const testGetLandlordInfo = async () => {
-    const landlordName = "John%20Doe"; 
+    const landlordName = "john"; 
     try {
-        const landlord = await getLandlordInfo(landlordName);
+        const landlord = await getLandlords(landlordName);
         console.log(landlord)
     } catch (error) {
         console.error('Error fetching landlord info:', error);

@@ -23,19 +23,27 @@ function ResultsBox() {
             console.error('No landlord name provided in URL');
             return;
         }
-
-        console.log(`Fetching landlord info for: ${name}`);
         const fetchLandlord = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/landlord/${name}`);
-                console.log('Fetched landlord data:', response.data);
                 setLandlord_name(response.data);
             } catch (error) {
                 console.error('Failed to fetch landlord', error);
             }
         };
 
+        const fetchOverallRating = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080/landlord/overallRating/${name}`);
+                setOverallRating(response.data);
+            } catch (error) {
+                console.error('Failed to fetch overall Rating', error);
+            }
+        };
+
+
         fetchLandlord();
+        fetchOverallRating();
     }, [ name ]);
 
     return (
@@ -45,7 +53,7 @@ function ResultsBox() {
                     <div className="left">
                         <p className = 'quality'>Quality</p>
                         <div className = "inner-left">
-                            <Box color = "#34ebab" width = "70px" height = "70px" className>5.0</Box>
+                            <Box color = "#34ebab" width = "70px" height = "70px" className>{ overallRating.toFixed(1)}</Box>
                         </div>
                          <p className = 'reviews'> 133 Reviews</p>
                      </div>
