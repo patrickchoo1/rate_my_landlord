@@ -2,7 +2,7 @@ const { getLandlords } = require('./dynamo');
 require('dotenv').config();
 
 const testGetLandlordInfo = async () => {
-    const landlordName = "john"; 
+    const landlordName = "John Doe"; 
     try {
         const landlord = await getLandlords(landlordName);
         console.log(landlord)

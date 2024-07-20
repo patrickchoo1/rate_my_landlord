@@ -6,8 +6,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-
 app.get('/landlords', async (req, res) => {
     try {
         const landlords = await getLandlords();
@@ -17,19 +15,30 @@ app.get('/landlords', async (req, res) => {
     }
 });
 
+app.get('/landlord/:name/overallRating', async (req, res) => {
+    const { name } = req.params;
 
-app.get('/overallRating', (req, res) => {
-    const totalRating = parseFloat(req.query.totalRating);
-    const numberOfRatings = parseInt(req.query.numberOfRatings, 10);
+    try {
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+        if (!landlord) {
+            console.log('Landlord not found'); 
+            return res.status(404).json({ error: 'Landlord not found' });
+        }
 
-    if (numberOfRatings === 0) {
-        return res.status(400).json({ error: 'Number of ratings cannot be zero' });
+        const { total_rating, number_of_ratings } = landlord;
+        if (number_of_ratings === 0) {
+            return res.status(200).json({ overallRating: 0 });
+        }
+
+        const temp = total_rating / number_of_ratings;
+        const overallRating = Math.trunc(temp*100)/100
+        console.log(`Overall rating for ${name}: ${overallRating}`); 
+        res.status(200).json({ overallRating });
+    } catch (error) {
+        console.error('Failed to calculate overall rating:', error);
+        res.status(500).json({ error: 'Failed to calculate overall rating' });
     }
-
-    const overallRating = totalRating / numberOfRatings;
-    res.json({ overallRating: overallRating });
 });
-
 
 app.get('/landlord/:name', async (req, res) => {
     const { name } = req.params;
@@ -49,7 +58,7 @@ app.get('/landlord/:name', async (req, res) => {
             res.status(404).json({ error: 'Landlord not found' });
         }
     } catch (error) {
-        console.error('Failed to fetch landlord:', error); // Log the error
+        console.error('Failed to fetch landlord:', error);
         res.status(500).json({ error: 'Failed to fetch landlord' });
     }
 });
