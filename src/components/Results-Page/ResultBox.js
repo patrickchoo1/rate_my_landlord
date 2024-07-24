@@ -43,6 +43,13 @@ function ResultsBox() {
         fetchOverallRating();
     }, [name]);
 
+    const boxColor = (rating) => {
+        if (rating >= 4.0) return "#7FF6C3";
+        if (rating >= 3.0 && rating < 4.0) return "#FFF170";
+        if (rating < 3) return "#FF9C9C";
+        return "#FFFFFF"; // Default color for undefined or null ratings
+    };
+
     if (!landlord) {
         return <div>Loading landlord data...</div>;
     }
@@ -54,7 +61,7 @@ function ResultsBox() {
                     <div className="left">
                         <p className='quality'>Quality</p>
                         <div className="inner-left">
-                            <Box color="#34ebab" width="70px" height="70px">
+                            <Box color={boxColor(overallRating)} width="70px" height="70px">
                                 {overallRating !== null && overallRating !== undefined 
                                   ? overallRating.toFixed(1) 
                                   : 'Loading...'}
