@@ -40,6 +40,57 @@ app.get('/landlord/:name/overallRating', async (req, res) => {
     }
 });
 
+
+app.get('/landlord/:name/would_rent_again', async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+        if (!landlord) {
+            console.log('Landlord not found');
+            return res.status(404).json({ error: 'Landlord not found' });
+        }
+
+        const { would_rent_again, number_of_ratings } = landlord;
+        if (number_of_ratings === 0) {
+            return res.status(200).json({ rentAgainPercentage: 0 });
+        }
+
+        const temp = (would_rent_again / number_of_ratings) * 100;
+        const rent_again_perc = Math.trunc(temp * 100) / 100; 
+        console.log(`Would rent again percentage for ${name}: ${rent_again_perc}%`);
+        res.status(200).json({ rentAgainPercentage: rent_again_perc });
+    } catch (error) {
+        console.error('Failed to calculate would rent again percentage:', error);
+        res.status(500).json({ error: 'Failed to calculate would rent again percentage' });
+    }
+});
+
+app.get('/landlord/:name/responsive', async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+        if (!landlord) {
+            console.log('Landlord not found');
+            return res.status(404).json({ error: 'Landlord not found' });
+        }
+
+        const { responsiveness, number_of_ratings } = landlord;
+        if (number_of_ratings === 0) {
+            return res.status(200).json({ responsive: 0 });
+        }
+
+        const temp = (responsiveness / number_of_ratings ) * 100;
+        const response_perc = Math.trunc(temp) / 100;
+        console.log(`Responsiveness percentage for ${name}: ${response_perc}%`);
+        res.status(200).json({ responsive: response_perc });
+    } catch (error) {
+        console.error('Failed to calculate responsiveness percentage:', error);
+        res.status(500).json({ error: 'Failed to calculate responsiveness percentage' });
+    }
+});
+
 app.get('/landlord/:name', async (req, res) => {
     const { name } = req.params;
     if (!name) {
@@ -60,6 +111,35 @@ app.get('/landlord/:name', async (req, res) => {
     } catch (error) {
         console.error('Failed to fetch landlord:', error);
         res.status(500).json({ error: 'Failed to fetch landlord' });
+    }
+});
+
+app.get('/landlord/:name/distribution', async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        // Fetch landlord info
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+        
+        console.log('Landlord data:', landlord); // Log data for debugging
+
+        if (!landlord || !landlord.distribution) {
+            console.log('No distribution data found for landlord');
+            return res.status(404).json({ error: 'No distribution data found for landlord' });
+        }
+
+        // Extract and format the distribution data
+        const distribution = landlord.distribution.map(item => {
+            const rating = parseInt(item.rating, 10);
+            const count = parseInt(item.count, 10);
+            return { rating, count };
+        });
+
+        console.log('Formatted distribution data:', distribution); // Log formatted data
+        res.status(200).json({ distribution });
+    } catch (error) {
+        console.error('Failed to fetch distribution data:', error);
+        res.status(500).json({ error: 'Failed to fetch distribution data' });
     }
 });
 

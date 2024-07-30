@@ -9,7 +9,6 @@ function HomePage() {
     const handleSearch = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            console.log(`Navigating to /searchresults/${encodeURIComponent(searchQuery)}`);
             navigate(`/searchresults/${encodeURIComponent(searchQuery)}`);
         }
     };

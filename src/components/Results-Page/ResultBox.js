@@ -12,8 +12,10 @@ function ResultsBox() {
     const [overallRating, setOverallRating] = useState(null);
 
     const handleClick = () => {
-        navigate(`/LandlordPage/${name}`);
-    };
+        if (landlord && landlord.landlord_name) {
+          navigate(`/landlordpage/${encodeURIComponent(landlord.landlord_name)}`);
+        }
+      };
 
     useEffect(() => {
         if (!name) {
@@ -47,7 +49,7 @@ function ResultsBox() {
         if (rating >= 4.0) return "#7FF6C3";
         if (rating >= 3.0 && rating < 4.0) return "#FFF170";
         if (rating < 3) return "#FF9C9C";
-        return "#FFFFFF"; // Default color for undefined or null ratings
+        return "#FFFFFF"; 
     };
 
     if (!landlord) {
