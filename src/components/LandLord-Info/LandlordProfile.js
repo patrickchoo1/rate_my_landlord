@@ -13,6 +13,8 @@ function LandlordProfile() {
   const [overallWouldRent, setOverallWouldRent] = useState(null);
   const [overallResponse, setOverallResponse] = useState(null);
   const [distribution, setDistribution] = useState([]); 
+  const [reviews, setReviews] = useState([]); 
+
 
 
   useEffect(() => {
@@ -69,11 +71,21 @@ function LandlordProfile() {
       }
     };
 
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/reviews`);
+        setReviews(response.data.reviews);
+      } catch (error) {
+        console.error('Failed to fetch reviews', error);
+      }
+    };
+
     fetchDistributionData();
     fetchResponsive();
     fetchWouldRentAgain();
     fetchLandlord();
     fetchOverallRating();
+    fetchReviews(); 
   }, [name]);
 
   if (loading) {
@@ -145,14 +157,7 @@ function LandlordProfile() {
               <button className="compare-button">Compare</button>
             </div>
           </div>
-          <div className="tags-section">
-            <h2>{landlordy.name}'s Top Tags</h2>
-            <div className="tags">
-              {landlordy.tags.map((tag, index) => (
-                <span key={index} className="tag">{tag}</span>
-              ))}
-            </div>
-          </div>
+
         </div>
         <div className="profile-other">
         <div className="rating-distribution">
@@ -169,20 +174,9 @@ function LandlordProfile() {
               ))}
             </div>
           </div>
-          <div className="similar-landlords">
-            <h2>Check out Similar Landlords in {landlord.location}</h2>
-            <div className="similar-list">
-              {landlordy.similarLandlords.map((similar, index) => (
-                <div key={index} className="similar-item">
-                  <span className="similar-rating">{similar.rating.toFixed(1)}</span>
-                  <span className="similar-name">{similar.name}</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
-      <ReviewList/>
+      <ReviewList reviews={reviews} />
     </div>
   );
 }

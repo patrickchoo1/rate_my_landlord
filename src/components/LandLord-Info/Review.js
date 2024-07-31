@@ -20,7 +20,7 @@ function Review({ review }) {
         <div className="review-header">
           <div className="review-details">
             <div className="review-header-content">
-              <h3>{review.propertyName}</h3>
+              <h3>{review.property}</h3>
               <div className="details">
                 <span>Rent: {review.rent}</span>
                 <span>Pets Allowed: {review.petsAllowed}</span>
