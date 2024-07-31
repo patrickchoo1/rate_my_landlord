@@ -1,86 +1,230 @@
-.review {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
+.landlord-profile {
   padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 20px;
-  display: flex;
 }
 
-.review-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-}
-
-.ratings {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-right: 20px;
-  height: 100%;
-}
-
-.rating {
+.profile-overview {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: flex-start;
+}
+
+.profile-other {
+  width: 100%; /* Ensure it takes the full width */
+  text-align: left;
+  margin-top: 20px;
+  
+}
+
+.rating {
+  width: 350px; 
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 20px;
 }
 
-.rating-label {
-  font-size: 12px;
+.rating-score {
+  align-items: center;
+  margin-bottom: 10px;
+  align-items: center; 
+}
+
+.rating-num {
+  font-size: 60px;
+  color: black;
+  font-weight: 900;
+  margin-right: 11px;
+}
+
+.rating-den {
+  font-size: 18px;
+  color: rgb(152, 152, 152);
+  position: relative;
+  font-weight: 700;
+  margin-bottom: 20px;
+  align-items: baseline;
+}
+
+.rating-summary {
+  font-size: 16px;
+  margin-top: 20px;
+  align-items: baseline;
+}
+
+.landlord-info {
+  margin-top: 10px;
+}
+
+.landlord-info h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.landlord-info p {
+  font-size: 18px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.metrics {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.separator {
+  width: 2px;
+  height: 50px;
+  background-color: #000;
+  margin: 0 20px;
+}
+
+.metric {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-value {
+  font-size: 24px;
   font-weight: bold;
+}
+
+.metric-label {
+  font-size: 14px;
   color: #666;
 }
 
-.rating-value {
+.actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.rate-button,
+.compare-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.rate-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.compare-button {
+  background-color: transparent;
+  border: 1px solid #007bff;
+  color: #007bff;
+}
+
+.rating-distribution {
+  flex: 1;
+  margin-left: 20px;
+}
+
+.rating-distribution h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  margin-top: 50px;
+
+}
+
+.distribution-bars {
+  margin-top: 40px;
+  width: 100%; 
+  
+}
+
+.distribution-bar {
+  display: flex;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 100%; 
+}
+
+.rating-label {
+  width: 50px;
+}
+
+.bar {
+  flex: 1;
+  height: 20px;
+  background-color: #eee;
+  margin: 0 10px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.filled {
+  height: 100%;
+  background-color: #007bff;
+}
+
+.rating-count {
+  width: 30px;
+}
+
+.tags-section,
+.similar-landlords {
+  margin-top: 30px;
+}
+
+.tags-section h2,
+.similar-landlords h2 {
   font-size: 24px;
-  font-weight: bold;
-  color: #000;
-}
-
-.review-details {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.review-header-content {
-  display: flex;
-  flex-direction: column;
   margin-bottom: 10px;
 }
 
-.review-details h3 {
-  font-size: 20px;
-  margin: 0 0 10px;
-  color: #000;
-}
-
-.details {
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  color: #666;
 }
 
-.details span {
-  font-size: 14px;
+.tag {
+  background-color: #eee;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 20px;
 }
 
-.review-date {
-  font-size: 12px;
-  color: #999;
-  align-self: flex-end;
+.similar-list {
+  display: flex;
+  gap: 20px;
 }
 
-.review-body {
-  margin-top: 20px;
+.similar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  width: 150px;
+  text-align: center;
 }
 
-.review-body p {
-  font-size: 14px;
-  color: #333;
+.similar-rating {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.similar-name {
+  margin-top: 5px;
+  font-size: 16px;
+  text-align: center;
 }
