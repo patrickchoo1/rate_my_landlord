@@ -106,21 +106,46 @@ app.get('/landlord/:name', async (req, res) => {
     }
 });
 
+app.get('/landlord/:name/distribution', async (req, res) => {
+    const { name } = req.params;
+
+    try {
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+
+        console.log('Landlord data:', landlord); 
+
+        if (!landlord || !landlord.distribution) {
+            console.log('No distribution data found for landlord');
+            return res.status(404).json({ error: 'No distribution data found for landlord' });
+        }
+
+        const distribution = landlord.distribution.map(item => {
+            const rating = parseInt(item.rating, 10);
+            const count = parseInt(item.count, 10);
+            return { rating, count };
+        });
+
+        console.log('Formatted distribution data:', distribution);
+        res.status(200).json({ distribution });
+    } catch (error) {
+        console.error('Failed to fetch distribution data:', error);
+        res.status(500).json({ error: 'Failed to fetch distribution data' });
+    }
+});
+
 app.get('/landlord/:name/reviews', async (req, res) => {
     const { name } = req.params;
 
     try {
-        // Fetch landlord info
         const landlord = await getLandlordInfo(decodeURIComponent(name));
 
-        console.log('Landlord data:', landlord); // Log data for debugging
+        console.log('Landlord data:', landlord); 
 
         if (!landlord || !landlord.reviews) {
             console.log('No reviews found for landlord');
             return res.status(404).json({ error: 'No reviews found for landlord' });
         }
 
-        // Extract and format the reviews data
         const reviews = landlord.reviews.map(item => ({
             bathrooms: parseInt(item.bathrooms, 10),
             bedrooms: parseInt(item.bedrooms, 10),
@@ -141,30 +166,17 @@ app.get('/landlord/:name/reviews', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch reviews data' });
     }
 });
-app.get('/landlord/:name/distribution', async (req, res) => {
+
+app.post('/landlord/:name/addreview', async (req, res) => {
     const { name } = req.params;
+    const review = req.body;
 
     try {
-        const landlord = await getLandlordInfo(decodeURIComponent(name));
-        
-        console.log('Landlord data:', landlord); // Log data for debugging
-
-        if (!landlord || !landlord.distribution) {
-            console.log('No distribution data found for landlord');
-            return res.status(404).json({ error: 'No distribution data found for landlord' });
-        }
-
-        const distribution = landlord.distribution.map(item => {
-            const rating = parseInt(item.rating, 10);
-            const count = parseInt(item.count, 10);
-            return { rating, count };
-        });
-
-        console.log('Formatted distribution data:', distribution); 
-        res.status(200).json({ distribution });
+        const updatedLandlord = await addReview(decodeURIComponent(name), review);
+        res.status(200).json(updatedLandlord);
     } catch (error) {
-        console.error('Failed to fetch distribution data:', error);
-        res.status(500).json({ error: 'Failed to fetch distribution data' });
+        console.error('Error adding review:', error);
+        res.status(500).json({ error: 'Failed to add review' });
     }
 });
 
