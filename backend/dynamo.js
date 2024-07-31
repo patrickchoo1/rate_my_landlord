@@ -32,7 +32,7 @@ const getLandlords = async () => {
 const getLandlordInfo = async (landlordName) => {
     const params = {
         TableName: TABLE_NAME,
-        Key: { landlord_name: landlordName}  
+        Key: { landlord_name: landlordName }
 
     };
     const landlord = await dynamoClient.get(params).promise();
@@ -41,7 +41,7 @@ const getLandlordInfo = async (landlordName) => {
 
 async function getLandlordReviews(name) {
     const params = {
-        TableName: 'Landlords', // Replace with your table name
+        TableName: TABLE_NAME,
         Key: {
             'landlord_name': { S: name }
         },
@@ -64,7 +64,6 @@ async function getLandlordReviews(name) {
             quality: parseFloat(review.M.quality.N),
             rent: parseFloat(review.M.rent.N),
             responsiveness: parseFloat(review.M.responsiveness.N),
-            tags: review.M.tags.L.map(tag => tag.S)
         }));
     } catch (error) {
         console.error('Error fetching landlord reviews:', error);
@@ -72,4 +71,73 @@ async function getLandlordReviews(name) {
     }
 }
 
-module.exports = { getLandlords, getLandlordInfo };
+const calculateOverallRating = async (landlordName) => {
+    try {
+        const landlord = await getLandlordInfo(landlordName);
+        if (!landlord) {
+            console.log('Landlord not found');
+            return { error: 'Landlord not found' };
+        }
+
+        const { individual_ratings } = landlord;
+        if (!individual_ratings || individual_ratings.length === 0) {
+            return 0;
+        }
+
+        const totalRatings = individual_ratings.length;
+        const sumRatings = individual_ratings.reduce((sum, review) => sum + review.rating, 0);
+        const overallRating = Math.round((sumRatings / totalRatings) * 100) / 10;
+
+        console.log(`Overall rating for ${landlordName} at ${propertyName}: ${overallRating}`);
+        return overallRating;
+    } catch (error) {
+        console.error('Failed to calculate overall rating:', error);
+        throw new Error('Failed to calculate overall rating');
+    }
+};
+
+const updateDistribution = (distribution, rating) => {
+    return distribution.map(item => {
+        if (item.rating === rating) {
+            return { rating: item.rating, count: item.count + 1 };
+        }
+        return item;
+    });
+};
+
+const addReview = async (landlordName, review) => {
+    const landlord = await getLandlordInfo(landlordName);
+
+    if (!landlord) {
+        throw new Error('Landlord not found');
+    }
+
+    // Calculate the new overall rating
+    const newTotalRating = landlord.total_rating + review.quality;
+    const newNumberOfRatings = landlord.number_of_ratings + 1;
+
+    // Add the new review
+    const updatedReviews = landlord.reviews || [];
+    updatedReviews.push(review);
+
+    // Update the landlord entry
+    const params = {
+        TableName: TABLE_NAME,
+        Key: { landlord_name: landlordName },
+        UpdateExpression: "set total_rating = :total_rating, number_of_ratings = :number_of_ratings, reviews = :reviews",
+        ExpressionAttributeValues: {
+            ":total_rating": newTotalRating,
+            ":number_of_ratings": newNumberOfRatings,
+            ":reviews": updatedReviews
+        },
+        ReturnValues: "ALL_NEW"
+    };
+
+    const result = await dynamoClient.update(params).promise();
+    return result.Attributes;
+};
+
+
+
+
+module.exports = { getLandlords, getLandlordInfo, calculateOverallRating, addReview };
