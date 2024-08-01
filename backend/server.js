@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getLandlords, getLandlordInfo } = require('./dynamo');
+const { getLandlords, getLandlordInfo, addReview } = require('./dynamo');
 
 const app = express();
 app.use(cors());
@@ -21,7 +21,7 @@ app.get('/landlord/:name/overallRating', async (req, res) => {
     try {
         const landlord = await getLandlordInfo(decodeURIComponent(name));
         if (!landlord) {
-            console.log('Landlord not found'); 
+            console.log('Landlord not found');
             return res.status(404).json({ error: 'Landlord not found' });
         }
 
@@ -31,8 +31,8 @@ app.get('/landlord/:name/overallRating', async (req, res) => {
         }
 
         const temp = total_rating / number_of_ratings;
-        const overallRating = Math.trunc(temp*100)/100
-        console.log(`Overall rating for ${name}: ${overallRating}`); 
+        const overallRating = Math.trunc(temp * 100) / 100
+        console.log(`Overall rating for ${name}: ${overallRating}`);
         res.status(200).json({ overallRating });
     } catch (error) {
         console.error('Failed to calculate overall rating:', error);
@@ -57,7 +57,7 @@ app.get('/landlord/:name/would_rent_again', async (req, res) => {
         }
 
         const temp = (would_rent_again / number_of_ratings) * 100;
-        const rent_again_perc = Math.trunc(temp * 100) / 100; 
+        const rent_again_perc = Math.trunc(temp * 100) / 100;
         console.log(`Would rent again percentage for ${name}: ${rent_again_perc}%`);
         res.status(200).json({ rentAgainPercentage: rent_again_perc });
     } catch (error) {
@@ -81,7 +81,7 @@ app.get('/landlord/:name/responsive', async (req, res) => {
             return res.status(200).json({ responsive: 0 });
         }
 
-        const temp = (responsiveness / number_of_ratings ) * 100;
+        const temp = (responsiveness / number_of_ratings) * 100;
         const response_perc = Math.trunc(temp) / 100;
         console.log(`Responsiveness percentage for ${name}: ${response_perc}%`);
         res.status(200).json({ responsive: response_perc });
@@ -119,8 +119,8 @@ app.get('/landlord/:name/distribution', async (req, res) => {
 
     try {
         const landlord = await getLandlordInfo(decodeURIComponent(name));
-        
-        console.log('Landlord data:', landlord); 
+
+        console.log('Landlord data:', landlord);
 
         if (!landlord || !landlord.distribution) {
             console.log('No distribution data found for landlord');
@@ -133,7 +133,7 @@ app.get('/landlord/:name/distribution', async (req, res) => {
             return { rating, count };
         });
 
-        console.log('Formatted distribution data:', distribution); 
+        console.log('Formatted distribution data:', distribution);
         res.status(200).json({ distribution });
     } catch (error) {
         console.error('Failed to fetch distribution data:', error);
@@ -165,8 +165,7 @@ app.get('/landlord/:name/reviews', async (req, res) => {
             property: item.property,
             quality: parseInt(item.quality, 10),
             rent: parseInt(item.rent, 10),
-            responsiveness: parseInt(item.responsiveness, 10),
-            tags: item.tags.map(tag => tag)
+            responsiveness: parseInt(item.responsiveness, 10)
         }));
 
         console.log('Formatted reviews data:', reviews); // Log formatted data
@@ -174,6 +173,20 @@ app.get('/landlord/:name/reviews', async (req, res) => {
     } catch (error) {
         console.error('Failed to fetch reviews data:', error);
         res.status(500).json({ error: 'Failed to fetch reviews data' });
+    }
+});
+
+app.post('/landlord/:name/addreview', async (req, res) => {
+    const { name } = req.params;
+    const review = req.body;
+
+    try {
+        const updatedLandlord = await addReview(decodeURIComponent(name), review);
+        res.status(200).json(updatedLandlord);
+    } catch (error) {
+        console.error('Error adding review:', error);
+        console.log("failed: ", review);
+        res.status(500).json({ error: 'Failed to add review' });
     }
 });
 
