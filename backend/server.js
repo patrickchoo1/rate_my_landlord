@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getLandlords, getLandlordInfo, calculateOverallRating, addReview } = require('./dynamo');
+const { getLandlords, getLandlordInfo, addReview } = require('./dynamo');
 
 const app = express();
 app.use(cors());
@@ -19,12 +19,20 @@ app.get('/landlord/:name/overallRating', async (req, res) => {
     const { name } = req.params;
 
     try {
-        const overallRating = await calculateOverallRating(decodeURIComponent(name));
-
-        if (overallRating.error) {
-            return res.status(404).json(overallRating);
+        const landlord = await getLandlordInfo(decodeURIComponent(name));
+        if (!landlord) {
+            console.log('Landlord not found');
+            return res.status(404).json({ error: 'Landlord not found' });
         }
 
+        const { total_rating, number_of_ratings } = landlord;
+        if (number_of_ratings === 0) {
+            return res.status(200).json({ overallRating: 0 });
+        }
+
+        const temp = total_rating / number_of_ratings;
+        const overallRating = Math.trunc(temp * 100) / 100
+        console.log(`Overall rating for ${name}: ${overallRating}`);
         res.status(200).json({ overallRating });
     } catch (error) {
         console.error('Failed to calculate overall rating:', error);
@@ -112,7 +120,7 @@ app.get('/landlord/:name/distribution', async (req, res) => {
     try {
         const landlord = await getLandlordInfo(decodeURIComponent(name));
 
-        console.log('Landlord data:', landlord); 
+        console.log('Landlord data:', landlord);
 
         if (!landlord || !landlord.distribution) {
             console.log('No distribution data found for landlord');
@@ -155,8 +163,7 @@ app.get('/landlord/:name/reviews', async (req, res) => {
             property: item.property,
             quality: parseInt(item.quality, 10),
             rent: parseInt(item.rent, 10),
-            responsiveness: parseInt(item.responsiveness, 10),
-            tags: item.tags.map(tag => tag)
+            responsiveness: parseInt(item.responsiveness, 10)
         }));
 
         console.log('Formatted reviews data:', reviews); // Log formatted data
@@ -176,6 +183,7 @@ app.post('/landlord/:name/addreview', async (req, res) => {
         res.status(200).json(updatedLandlord);
     } catch (error) {
         console.error('Error adding review:', error);
+        console.log("failed: ", review);
         res.status(500).json({ error: 'Failed to add review' });
     }
 });

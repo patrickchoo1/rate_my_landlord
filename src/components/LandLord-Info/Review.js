@@ -32,12 +32,7 @@ function Review({ review }) {
           </div>
         </div>
         <div className="review-body">
-          <p>{review.review}</p>
-          <div className="tags">
-            {review.tags.map((tag, index) => (
-              <span key={index} className="tag">{tag}</span>
-            ))}
-          </div>
+          <p>{review.comments}</p>
         </div>
       </div>
       <div className="review-date">{review.date}</div>
@@ -46,4 +41,5 @@ function Review({ review }) {
 }
 
 export default Review;
+
 

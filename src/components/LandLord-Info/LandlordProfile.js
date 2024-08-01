@@ -3,19 +3,23 @@ import { useParams } from 'react-router-dom';
 import ReviewList from './ReviewList';
 import './LandlordProfile.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 function LandlordProfile() {
   const { name } = useParams();
   const [landlord, setLandlord] = useState(null);
   const [overallRating, setOverallRating] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true);
   const [overallWouldRent, setOverallWouldRent] = useState(null);
   const [overallResponse, setOverallResponse] = useState(null);
-  const [distribution, setDistribution] = useState([]); 
-  const [reviews, setReviews] = useState([]); 
+  const [distribution, setDistribution] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
-
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/rate/${landlord.landlord_name}`);
+  }
 
   useEffect(() => {
     if (!name) {
@@ -30,7 +34,7 @@ function LandlordProfile() {
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch landlord', error);
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
@@ -45,19 +49,19 @@ function LandlordProfile() {
 
     const fetchWouldRentAgain = async () => {
       try {
-          const response = await axios.get(`http://localhost:8080/landlord/${name}/would_rent_again`);
-          setOverallWouldRent(response.data.rentAgainPercentage);
-      } catch(error) {
-          console.error('Failed to fetch overall would rent percent', error);
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/would_rent_again`);
+        setOverallWouldRent(response.data.rentAgainPercentage);
+      } catch (error) {
+        console.error('Failed to fetch overall would rent percent', error);
       }
     };
 
     const fetchResponsive = async () => {
       try {
-          const response = await axios.get(`http://localhost:8080/landlord/${name}/responsive`);
-          setOverallResponse(response.data.responsive);
-      } catch(error) {
-          console.error('Failed to fetch overall would rent percent', error);
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/responsive`);
+        setOverallResponse(response.data.responsive);
+      } catch (error) {
+        console.error('Failed to fetch overall would rent percent', error);
       }
     };
 
@@ -85,7 +89,7 @@ function LandlordProfile() {
     fetchWouldRentAgain();
     fetchLandlord();
     fetchOverallRating();
-    fetchReviews(); 
+    fetchReviews();
   }, [name]);
 
   if (loading) {
@@ -129,9 +133,9 @@ function LandlordProfile() {
         <div className="profile-overview">
           <div className="rating">
             <div className="rating-score">
-              <span className="rating-num">{overallRating !== null && overallRating !== undefined 
-                                  ? overallRating.toFixed(1) 
-                                  : 'Loading...'}</span>
+              <span className="rating-num">{overallRating !== null && overallRating !== undefined
+                ? overallRating.toFixed(1)
+                : 'Loading...'}</span>
               <span className="rating-den">/&nbsp;5</span>
             </div>
             <div className="rating-summary">
@@ -146,21 +150,21 @@ function LandlordProfile() {
                 <span className="metric-value">{overallWouldRent !== null ? `${overallWouldRent.toFixed(1)}` : 'Loading...'}%</span>
                 <span className="metric-label">Would rent again</span>
               </div>
-              <div className="separator"/>
+              <div className="separator" />
               <div className="metric">
                 <span className="metric-value">{overallResponse !== null ? `${overallResponse.toFixed(1)}` : 'Loading...'}</span>
                 <span className="metric-label">Responsiveness</span>
               </div>
             </div>
             <div className="actions">
-              <button className="rate-button">Rate</button>
+              <button className="rate-button" onClick={handleClick}>Rate</button>
               <button className="compare-button">Compare</button>
             </div>
           </div>
 
         </div>
         <div className="profile-other">
-        <div className="rating-distribution">
+          <div className="rating-distribution">
             <h2>Rating Distribution</h2>
             <div className="distribution-bars">
               {distribution.map(({ rating, count }) => (

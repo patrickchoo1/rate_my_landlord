@@ -33,6 +33,7 @@ const getLandlordInfo = async (landlordName) => {
     const params = {
         TableName: TABLE_NAME,
         Key: { landlord_name: landlordName }
+        Key: { landlord_name: landlordName }
 
     };
     const landlord = await dynamoClient.get(params).promise();
@@ -41,6 +42,7 @@ const getLandlordInfo = async (landlordName) => {
 
 async function getLandlordReviews(name) {
     const params = {
+        TableName: TABLE_NAME,
         TableName: TABLE_NAME,
         Key: {
             'landlord_name': { S: name }
@@ -54,7 +56,6 @@ async function getLandlordReviews(name) {
             return null;
         }
 
-        // Extract reviews from the response
         return data.Item.reviews.L.map(review => ({
             bathrooms: parseFloat(review.M.bathrooms.N),
             bedrooms: parseFloat(review.M.bedrooms.N),
@@ -64,6 +65,7 @@ async function getLandlordReviews(name) {
             quality: parseFloat(review.M.quality.N),
             rent: parseFloat(review.M.rent.N),
             responsiveness: parseFloat(review.M.responsiveness.N),
+            wouldRentAgain: { "S": review.would_rent_again ? "Yes" : "No" }
         }));
     } catch (error) {
         console.error('Error fetching landlord reviews:', error);
@@ -112,15 +114,25 @@ const addReview = async (landlordName, review) => {
         throw new Error('Landlord not found');
     }
 
-    // Calculate the new overall rating
+    const formattedReview = {
+        bedrooms: review.bedrooms ,
+        date: new Date().toISOString() ,
+        comments: review.comments,
+        pets_allowed: review.pets_allowed,
+        property: review.property,
+        bathrooms: review.bathrooms,
+        rent: review.rent,
+        quality: review.quality,
+        responsiveness: review.responsiveness ,
+        wouldRentAgain: review.would_rent_again
+    };
+
+    const updatedReviews = landlord.reviews || [];
+    updatedReviews.push(formattedReview);
+
     const newTotalRating = landlord.total_rating + review.quality;
     const newNumberOfRatings = landlord.number_of_ratings + 1;
 
-    // Add the new review
-    const updatedReviews = landlord.reviews || [];
-    updatedReviews.push(review);
-
-    // Update the landlord entry
     const params = {
         TableName: TABLE_NAME,
         Key: { landlord_name: landlordName },
@@ -133,11 +145,14 @@ const addReview = async (landlordName, review) => {
         ReturnValues: "ALL_NEW"
     };
 
-    const result = await dynamoClient.update(params).promise();
-    return result.Attributes;
+    try {
+        const result = await dynamoClient.update(params).promise();
+        return result.Attributes;
+    } catch (error) {
+        console.error('Error updating landlord:', error.message, error.stack); 
+        throw new Error('Failed to update landlord');
+    }
 };
-
-
 
 
 module.exports = { getLandlords, getLandlordInfo, calculateOverallRating, addReview };
