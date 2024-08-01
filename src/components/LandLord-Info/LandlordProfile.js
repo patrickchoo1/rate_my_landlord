@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 function LandlordProfile() {
+  
   const { name } = useParams();
   const [landlord, setLandlord] = useState(null);
   const [overallRating, setOverallRating] = useState(null);
@@ -105,27 +106,6 @@ function LandlordProfile() {
   }
 
   const totalRatings = distribution.reduce((acc, item) => acc + item.count, 0);
-
-  const landlordy = {
-    name: "Collegetown Properties",
-    location: "Ithaca, NY",
-    overallQuality: 4.5,
-    responsiveness: 4.3,
-    wouldRentAgain: 94,
-    // ratingDistribution: {
-    //   5: 98,
-    //   4: 19,
-    //   3: 9,
-    //   2: 4,
-    //   1: 3
-    // },
-    tags: ["Good Maintenance", "Responsive", "Affordable"],
-    similarLandlords: [
-      { name: "Collegetown Junctions", rating: 3.4 },
-      { name: "Ithaca Rentals", rating: 2.5 },
-      { name: "Trabiss Hi Properties", rating: 4.0 }
-    ]
-  };
 
   return (
     <div className="landlord-profile">

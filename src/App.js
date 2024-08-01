@@ -16,7 +16,6 @@ function App() {
             <Route path="/searchresults/:name" element={<SearchResults />} />
             <Route path="/landlordpage/:name" element={<LandlordPage />} />
             <Route path="/rate/:name" element={<RatePage />} />
-
           </Routes>
         </div>
       </div>

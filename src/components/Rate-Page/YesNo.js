@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './YesNo.css';
 
+
 function YesNo({ name, onChange }) {
     const [selectedOption, setSelectedOption] = useState('');
 
@@ -39,5 +40,3 @@ function YesNo({ name, onChange }) {
 }
 
 export default YesNo;
-
-

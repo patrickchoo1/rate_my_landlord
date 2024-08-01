@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './RatingScale.css';
 
+
 function RatingScale({ name, label, scaleLeft, scaleRight, onChange }) {
     const [rating, setRating] = useState(0);
 
