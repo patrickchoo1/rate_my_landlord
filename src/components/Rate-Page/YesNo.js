@@ -12,23 +12,23 @@ function YesNo({ name, onChange }) {
 
     return (
         <div className="yes-no-options">
-            <label className={`yes-no ${selectedOption === 'yes' ? 'selected' : ''}`}>
+            <label className={`yes-no ${selectedOption === 'Yes' ? 'selected' : ''}`}>
                 <input
                     type="radio"
                     name={name}
-                    value="yes"
-                    checked={selectedOption === 'yes'}
+                    value="Yes"
+                    checked={selectedOption === 'Yes'}
                     onChange={handleOptionChange}
                 />
                 <span className="yes-no-circle"></span>
                 Yes
             </label>
-            <label className={`yes-no ${selectedOption === 'no' ? 'selected' : ''}`}>
+            <label className={`yes-no ${selectedOption === 'No ' ? 'selected' : ''}`}>
                 <input
                     type="radio"
                     name={name}
-                    value="no"
-                    checked={selectedOption === 'no'}
+                    value="No "
+                    checked={selectedOption === 'No '}
                     onChange={handleOptionChange}
                 />
                 <span className="yes-no-circle"></span>

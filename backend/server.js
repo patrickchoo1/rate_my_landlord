@@ -154,7 +154,8 @@ app.get('/landlord/:name/reviews', async (req, res) => {
             property: item.property,
             quality: parseInt(item.quality, 10),
             rent: parseInt(item.rent, 10),
-            responsiveness: parseInt(item.responsiveness, 10)
+            responsiveness: parseInt(item.responsiveness, 10),
+            wouldRentAgain: item.wouldRentAgain
         }));
 
         console.log('Formatted reviews data:', reviews); // Log formatted data

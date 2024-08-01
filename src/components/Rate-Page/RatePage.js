@@ -13,12 +13,12 @@ function RatePage() {
     const [review, setReview] = useState({
         quality: 0,
         responsiveness: 0,
-        pets_allowed: 'no ',
+        pets_allowed: 'No ',
         rent: 0,
         bedrooms: 0,
         bathrooms: 0,
         comments: '',
-        would_rent_again: 'no ',
+        would_rent_again: 'No ',
         property: ''
     });
 
