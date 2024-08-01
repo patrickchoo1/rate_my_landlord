@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { format } = require('date-fns');
 require('dotenv').config();
 
 AWS.config.update({
@@ -33,8 +34,6 @@ const getLandlordInfo = async (landlordName) => {
     const params = {
         TableName: TABLE_NAME,
         Key: { landlord_name: landlordName }
-        Key: { landlord_name: landlordName }
-
     };
     const landlord = await dynamoClient.get(params).promise();
     return landlord.Item;
@@ -65,7 +64,7 @@ async function getLandlordReviews(name) {
             quality: parseFloat(review.M.quality.N),
             rent: parseFloat(review.M.rent.N),
             responsiveness: parseFloat(review.M.responsiveness.N),
-            wouldRentAgain: { "S": review.would_rent_again ? "Yes" : "No" }
+            wouldRentAgain: review.M.would_rent_again.S
         }));
     } catch (error) {
         console.error('Error fetching landlord reviews:', error);
@@ -81,16 +80,16 @@ const calculateOverallRating = async (landlordName) => {
             return { error: 'Landlord not found' };
         }
 
-        const { individual_ratings } = landlord;
-        if (!individual_ratings || individual_ratings.length === 0) {
+        const { reviews } = landlord;
+        if (!reviews || reviews === 0) {
             return 0;
         }
 
-        const totalRatings = individual_ratings.length;
-        const sumRatings = individual_ratings.reduce((sum, review) => sum + review.rating, 0);
-        const overallRating = Math.round((sumRatings / totalRatings) * 100) / 10;
+        const totalRatings = reviews.length;
+        const sumRatings = reviews.reduce((sum, review) => sum + review.quality, 0);
+        const overallRating = Math.round((sumRatings / totalRatings) * 100) / 100;
 
-        console.log(`Overall rating for ${landlordName} at ${propertyName}: ${overallRating}`);
+        console.log('Overall Rating: ', overallRating);
         return overallRating;
     } catch (error) {
         console.error('Failed to calculate overall rating:', error);
@@ -115,15 +114,15 @@ const addReview = async (landlordName, review) => {
     }
 
     const formattedReview = {
-        bedrooms: review.bedrooms ,
-        date: new Date().toISOString() ,
+        bedrooms: review.bedrooms,
+        date: format(new Date(), 'MMM d, yyyy'),
         comments: review.comments,
         pets_allowed: review.pets_allowed,
         property: review.property,
         bathrooms: review.bathrooms,
         rent: review.rent,
         quality: review.quality,
-        responsiveness: review.responsiveness ,
+        responsiveness: review.responsiveness,
         wouldRentAgain: review.would_rent_again
     };
 
@@ -149,7 +148,7 @@ const addReview = async (landlordName, review) => {
         const result = await dynamoClient.update(params).promise();
         return result.Attributes;
     } catch (error) {
-        console.error('Error updating landlord:', error.message, error.stack); 
+        console.error('Error updating landlord:', error.message, error.stack);
         throw new Error('Failed to update landlord');
     }
 };

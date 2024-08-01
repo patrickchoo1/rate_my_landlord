@@ -35,7 +35,7 @@ function ResultsBox() {
         const fetchOverallRating = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/landlord/${name}/overallRating`);
-                setOverallRating(response.data.overallRating);
+                setOverallRating(response.data);
             } catch (error) {
                 console.error('Failed to fetch overall rating', error);
             }

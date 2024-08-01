@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { getLandlords, getLandlordInfo, addReview } = require('./dynamo');
+const { getLandlords, getLandlordInfo, calculateOverallRating, addReview } = require('./dynamo');
 
 const app = express();
 app.use(cors());
@@ -19,21 +19,12 @@ app.get('/landlord/:name/overallRating', async (req, res) => {
     const { name } = req.params;
 
     try {
-        const landlord = await getLandlordInfo(decodeURIComponent(name));
-        if (!landlord) {
-            console.log('Landlord not found');
-            return res.status(404).json({ error: 'Landlord not found' });
+        const result = await calculateOverallRating(decodeURIComponent(name));
+        if (result.error) {
+            return res.status(404).json(result);
         }
-
-        const { total_rating, number_of_ratings } = landlord;
-        if (number_of_ratings === 0) {
-            return res.status(200).json({ overallRating: 0 });
-        }
-
-        const temp = total_rating / number_of_ratings;
-        const overallRating = Math.trunc(temp * 100) / 100
-        console.log(`Overall rating for ${name}: ${overallRating}`);
-        res.status(200).json({ overallRating });
+        
+        res.status(200).json(result);
     } catch (error) {
         console.error('Failed to calculate overall rating:', error);
         res.status(500).json({ error: 'Failed to calculate overall rating' });
