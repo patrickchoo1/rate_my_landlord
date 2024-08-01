@@ -20,7 +20,7 @@ function Review({ review }) {
         <div className="review-header">
           <div className="review-details">
             <div className="review-header-content">
-              <h3>{review.propertyName}</h3>
+              <h3>{review.property}</h3>
               <div className="details">
                 <span>Rent: {review.rent}</span>
                 <span>Pets Allowed: {review.pets ? 'Yes' : 'No'}</span>
@@ -32,12 +32,7 @@ function Review({ review }) {
           </div>
         </div>
         <div className="review-body">
-          <p>{review.review}</p>
-          <div className="tags">
-            {review.tags.map((tag, index) => (
-              <span key={index} className="tag">{tag}</span>
-            ))}
-          </div>
+          <p>{review.comments}</p>
         </div>
       </div>
       <div className="review-date">{review.date}</div>
@@ -46,4 +41,5 @@ function Review({ review }) {
 }
 
 export default Review;
+
 

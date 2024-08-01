@@ -1,36 +1,111 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import ReviewList from './ReviewList';
 import './LandlordProfile.css';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 
 function LandlordProfile() {
-  const navigate = useNavigate();
+  
+  const { name } = useParams();
+  const [landlord, setLandlord] = useState(null);
+  const [overallRating, setOverallRating] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [overallWouldRent, setOverallWouldRent] = useState(null);
+  const [overallResponse, setOverallResponse] = useState(null);
+  const [distribution, setDistribution] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
+  const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/landlord-rating/:id");
+    navigate(`/rate/${landlord.landlord_name}`);
   }
 
-  const landlord = {
-    name: "Collegetown Properties",
-    location: "Ithaca, NY",
-    overallQuality: 4.5,
-    responsiveness: 4.3,
-    wouldRentAgain: 94,
-    ratingDistribution: {
-      5: 98,
-      4: 19,
-      3: 9,
-      2: 4,
-      1: 3
-    },
-    tags: ["Good Maintenance", "Responsive", "Affordable"],
-    similarLandlords: [
-      { name: "Collegetown Junctions", rating: 3.4 },
-      { name: "Ithaca Rentals", rating: 2.5 },
-      { name: "Trabiss Hi Properties", rating: 4.0 }
-    ]
-  };
+  useEffect(() => {
+    if (!name) {
+      console.error('No landlord name provided in URL');
+      return;
+    }
+
+    const fetchLandlord = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}`);
+        setLandlord(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch landlord', error);
+        setLoading(false);
+      }
+    };
+
+    const fetchOverallRating = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/overallRating`);
+        setOverallRating(response.data);
+      } catch (error) {
+        console.error('Failed to fetch overall rating', error);
+      }
+    };
+
+    const fetchWouldRentAgain = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/would_rent_again`);
+        setOverallWouldRent(response.data.rentAgainPercentage);
+      } catch (error) {
+        console.error('Failed to fetch overall would rent percent', error);
+      }
+    };
+
+    const fetchResponsive = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/responsive`);
+        setOverallResponse(response.data.responsive);
+      } catch (error) {
+        console.error('Failed to fetch overall would rent percent', error);
+      }
+    };
+
+    const fetchDistributionData = async () => {
+      try {
+        const distributionRes = await axios.get(`http://localhost:8080/landlord/${name}/distribution`);
+        setDistribution(distributionRes.data.distribution);
+      } catch (error) {
+        console.error('Failed to fetch distribution data', error);
+        setLoading(false);
+      }
+    };
+
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/landlord/${name}/reviews`);
+        setReviews(response.data.reviews);
+      } catch (error) {
+        console.error('Failed to fetch reviews', error);
+      }
+    };
+
+    fetchDistributionData();
+    fetchResponsive();
+    fetchWouldRentAgain();
+    fetchLandlord();
+    fetchOverallRating();
+    fetchReviews();
+  }, [name]);
+
+  if (loading) {
+    return <div>Loading landlord profile...</div>;
+  }
+
+  if (!landlord) {
+    return <div>No landlord data available.</div>;
+  }
+
+  if (!distribution.length) {
+    return <div>No distribution data available.</div>;
+  }
+
+  const totalRatings = distribution.reduce((acc, item) => acc + item.count, 0);
 
   return (
     <div className="landlord-profile">
@@ -38,7 +113,9 @@ function LandlordProfile() {
         <div className="profile-overview">
           <div className="rating">
             <div className="rating-score">
-              <span className="rating-num">{landlord.overallQuality}</span>
+              <span className="rating-num">{overallRating !== null && overallRating !== undefined
+                ? overallRating.toFixed(1)
+                : 'Loading...'}</span>
               <span className="rating-den">/&nbsp;5</span>
             </div>
             <div className="rating-summary">
@@ -46,16 +123,16 @@ function LandlordProfile() {
             </div>
           </div>
           <div className="landlord-info">
-            <h1>{landlord.name}</h1>
-            <p>{landlord.location}</p>
+            <h1>{landlord.property_name}</h1>
+            <p>{landlord.address}</p>
             <div className="metrics">
               <div className="metric">
-                <span className="metric-value">{landlord.wouldRentAgain}%</span>
+                <span className="metric-value">{overallWouldRent !== null ? `${overallWouldRent.toFixed(1)}` : 'Loading...'}%</span>
                 <span className="metric-label">Would rent again</span>
               </div>
               <div className="separator" />
               <div className="metric">
-                <span className="metric-value">{landlord.responsiveness}</span>
+                <span className="metric-value">{overallResponse !== null ? `${overallResponse.toFixed(1)}` : 'Loading...'}</span>
                 <span className="metric-label">Responsiveness</span>
               </div>
             </div>
@@ -64,44 +141,26 @@ function LandlordProfile() {
               <button className="compare-button">Compare</button>
             </div>
           </div>
-          <div className="tags-section">
-            <h2>{landlord.name}'s Top Tags</h2>
-            <div className="tags">
-              {landlord.tags.map((tag, index) => (
-                <span key={index} className="tag">{tag}</span>
-              ))}
-            </div>
-          </div>
+
         </div>
         <div className="profile-other">
           <div className="rating-distribution">
             <h2>Rating Distribution</h2>
             <div className="distribution-bars">
-              {[5, 4, 3, 2, 1].map((key) => (
-                <div key={key} className="distribution-bar">
-                  <span className="rating-label">{key}</span>
+              {distribution.map(({ rating, count }) => (
+                <div key={rating} className="distribution-bar">
+                  <span className="rating-label">{rating}</span>
                   <div className="bar">
-                    <div className="filled" style={{ width: `${landlord.ratingDistribution[key]}%` }}></div>
+                    <div className="filled" style={{ width: `${(count / totalRatings) * 100}%` }}></div>
                   </div>
-                  <span className="rating-count">{landlord.ratingDistribution[key]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="similar-landlords">
-            <h2>Check out Similar Landlords in {landlord.location}</h2>
-            <div className="similar-list">
-              {landlord.similarLandlords.map((similar, index) => (
-                <div key={index} className="similar-item">
-                  <span className="similar-rating">{similar.rating.toFixed(1)}</span>
-                  <span className="similar-name">{similar.name}</span>
+                  <span className="rating-count">{count}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
-      <ReviewList />
+      <ReviewList reviews={reviews} />
     </div>
   );
 }

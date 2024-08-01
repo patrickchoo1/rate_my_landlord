@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import './RatingScale.css';
 
-function RatingScale({ label, scaleLeft, scaleRight }) {
+
+function RatingScale({ name, label, scaleLeft, scaleRight, onChange }) {
     const [rating, setRating] = useState(0);
 
     const handleRatingChange = (event) => {
-        setRating(parseInt(event.target.value, 10));
+        const value = parseInt(event.target.value, 10);
+        setRating(value);
+        onChange(name, value);
     };
 
     return (
